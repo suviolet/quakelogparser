@@ -16,3 +16,11 @@ def games(request):
 
     return JsonResponse(games_dict)
 
+
+def game(request, game_id):
+    game_one = collection.find_one({'game_id': game_id})
+
+    if game_one:
+        del game_one['_id']
+        return JsonResponse(game_one)
+    return JsonResponse({'error': 'game not found'}, status=404)

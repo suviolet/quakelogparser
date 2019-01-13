@@ -21,3 +21,34 @@ class TestViewGameapi:
         assert response.json() == games_dict
         assert len(response.json()) == 21
 
+    def test_retrieve_game(self, client, populate_db, collection):
+        response = client.get('/game/1/')
+
+        game_one = collection.find_one({'game_id': '1'})
+        del game_one['_id']
+
+        assert response.status_code == 200
+        assert response.json() == game_one
+
+    def test_retrieve_game_not_found_with_pre_populated_db(
+        self,
+        client,
+        populate_db,
+        collection
+    ):
+        response = client.get('/game/22/')
+
+        assert response.status_code == 404
+        assert response.json() == {'error': 'game not found'}
+
+    @pytest.mark.parametrize('game_id', ['1', '22'])
+    def test_retrieve_game_not_found_with_empty_db(
+        self,
+        client,
+        collection,
+        game_id
+    ):
+        response = client.get('/game/{game_id}/'.format(game_id=game_id))
+
+        assert response.status_code == 404
+        assert response.json() == {'error': 'game not found'}
