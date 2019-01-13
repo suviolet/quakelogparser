@@ -1,6 +1,6 @@
 from pymongo import MongoClient as client
 
-from settings import (MONGODB_COLLECTION, MONGODB_DB, MONGODB_PORT,
+from core.settings import (MONGODB_COLLECTION, MONGODB_DB, MONGODB_PORT,
                            MONGODB_SERVER)
 
 
